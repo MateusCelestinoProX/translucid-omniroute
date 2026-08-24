@@ -1,6 +1,7 @@
 /**
- * patch-omniroute-engine.js — Translucid OmniRoute Engine (Zero Grid + Pure Liquid Glass Edition)
- * Remove 100% dos quadriculados/grades de fundo e aplica Liquid Glass cristalino com alta legibilidade
+ * patch-omniroute-engine.js — Translucid OmniRoute Engine (Permanent Dark Mode Edition)
+ * Garante 100% que o OmniRoute permaneça SEMPRE no Modo Escuro (Dark Mode Fixo),
+ * independente se o macOS estiver no Modo Claro ou Escuro.
  */
 const fs = require('fs');
 const path = require('path');
@@ -12,14 +13,19 @@ if (!targetDir || !fs.existsSync(targetDir)) {
   process.exit(1);
 }
 
-console.log('⚡ Removendo quadriculado e aplicando Pure Crystal Glass no OmniRoute em:', targetDir);
+console.log('⚡ Injetando Modo Escuro Permanente + Zero Grid no OmniRoute em:', targetDir);
 
 // =========================================================================
-// 1. Modificar main.js (Janela Nativa com Vibrancy Apple Silicon Puro)
+// 1. Modificar main.js (Electron NativeTheme Dark Lock + Janela Transparente)
 // =========================================================================
 const mainJsPath = path.join(targetDir, 'main.js');
 if (fs.existsSync(mainJsPath)) {
   let mainJs = fs.readFileSync(mainJsPath, 'utf8');
+
+  // Força nativeTheme.themeSource = "dark"
+  if (!mainJs.includes('nativeTheme.themeSource = "dark"')) {
+    mainJs = `const { nativeTheme: _omniNativeTheme } = require("electron");\ntry { _omniNativeTheme.themeSource = "dark"; } catch(e){}\n` + mainJs;
+  }
 
   mainJs = mainJs.replace(
     /backgroundColor:\s*"#0a0a0a",/,
@@ -38,11 +44,11 @@ if (fs.existsSync(mainJsPath)) {
   );
 
   fs.writeFileSync(mainJsPath, mainJs, 'utf8');
-  console.log('✅ main.js configurado.');
+  console.log('✅ main.js configurado com nativeTheme dark.');
 }
 
 // =========================================================================
-// 2. Modificar preload.js (Eliminação Total do body::before Grid)
+// 2. Modificar preload.js (Trava Rígida no Modo Escuro + Zero Grid)
 // =========================================================================
 const preloadJsPath = path.join(targetDir, 'preload.js');
 if (fs.existsSync(preloadJsPath)) {
@@ -51,20 +57,46 @@ if (fs.existsSync(preloadJsPath)) {
   // Limpa injeções antigas
   preloadJs = preloadJs.replace(/function installOmniLiquidGlass\(\)[\s\S]*?installOmniLiquidGlass\(\);/g, '');
 
-  const pureCrystalGlassNoGrid = `
+  const permanentDarkGlass = `
 function installOmniLiquidGlass() {
+  const enforceDark = () => {
+    if (!document.documentElement) return;
+    document.documentElement.classList.add("dark");
+    document.documentElement.classList.remove("light");
+    document.documentElement.setAttribute("data-theme", "dark");
+    document.documentElement.style.colorScheme = "dark";
+    try {
+      localStorage.setItem("theme", "dark");
+      localStorage.setItem("omniroute-theme", "dark");
+    } catch (e) {}
+  };
+
   const attach = () => {
+    enforceDark();
     if (!document.head || document.getElementById("omni-translucid-liquid-glass")) return;
 
     const style = document.createElement("style");
     style.id = "omni-translucid-liquid-glass";
     style.textContent = \`
-      :root, html, body {
+      /* 🔒 FORÇA MODO ESCURO PERMANENTE EM TODAS AS CLASSES E TEMAS */
+      :root, html, body, .light, [data-theme="light"], .dark, [data-theme="dark"] {
+        color-scheme: dark !important;
         background: transparent !important;
         background-color: transparent !important;
         font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif !important;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
+
+        /* Variáveis de Tema Escuro Forçadas Mesmo no Light Mode */
+        --color-bg: transparent !important;
+        --color-bg-primary: transparent !important;
+        --color-surface: rgba(14, 18, 28, 0.55) !important;
+        --color-card: rgba(14, 18, 28, 0.55) !important;
+        --color-sidebar: rgba(10, 14, 22, 0.40) !important;
+        --color-text-main: #ffffff !important;
+        --color-text-primary: #ffffff !important;
+        --color-text-muted: #e2e8f0 !important;
+        --color-border: rgba(255, 255, 255, 0.18) !important;
       }
 
       /* 🚫 ELIMINAÇÃO TOTAL DA GRADE / QUADRICULADO DE FUNDO */
@@ -151,9 +183,9 @@ function installOmniLiquidGlass() {
 installOmniLiquidGlass();
 `;
 
-  preloadJs = pureCrystalGlassNoGrid + '\n' + preloadJs;
+  preloadJs = permanentDarkGlass + '\n' + preloadJs;
   fs.writeFileSync(preloadJsPath, preloadJs, 'utf8');
-  console.log('✅ preload.js atualizado: Quadriculado 100% removido.');
+  console.log('✅ preload.js atualizado com trava de Dark Mode Permanente.');
 }
 
-console.log('🎉 OmniRoute configurado sem quadriculado!');
+console.log('🎉 OmniRoute travado no Modo Escuro Permanente com sucesso!');
