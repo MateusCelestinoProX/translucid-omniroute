@@ -1,6 +1,6 @@
 /**
- * patch-omniroute-engine.js — Translucid OmniRoute Engine (Crystal Glass + High Contrast Edition)
- * Injeta Liquid Glass Refinado, Alto Contraste de Texto e Apple Native Vibrancy no OmniRoute Desktop
+ * patch-omniroute-engine.js — Translucid OmniRoute Engine (120 FPS ProMotion Edition)
+ * Aceleração por Hardware Metal, Remoção de Repaints Pesados e Fluidez Absoluta
  */
 const fs = require('fs');
 const path = require('path');
@@ -12,10 +12,10 @@ if (!targetDir || !fs.existsSync(targetDir)) {
   process.exit(1);
 }
 
-console.log('⚡ Iniciando injeção de Crystal Liquid Glass no OmniRoute em:', targetDir);
+console.log('⚡ Otimizando OmniRoute para 120 FPS ProMotion em:', targetDir);
 
 // =========================================================================
-// 1. Modificar main.js (Janela Electron Transparente com Vibrancy)
+// 1. Modificar main.js (Janela Nativa com Vibrancy Apple Silicon Puro)
 // =========================================================================
 const mainJsPath = path.join(targetDir, 'main.js');
 if (fs.existsSync(mainJsPath)) {
@@ -26,7 +26,7 @@ if (fs.existsSync(mainJsPath)) {
     `backgroundColor: "#00000000",
     transparent: true,
     hasShadow: true,
-    opacity: 0.92,`
+    opacity: 0.94,`
   );
 
   mainJs = mainJs.replace(
@@ -38,34 +38,33 @@ if (fs.existsSync(mainJsPath)) {
   );
 
   fs.writeFileSync(mainJsPath, mainJs, 'utf8');
-  console.log('✅ main.js configurado com transparent: true e vibrancy: under-window.');
+  console.log('✅ main.js configurado com aceleração nativa.');
 }
 
 // =========================================================================
-// 2. Modificar preload.js (Injeção de Liquid Glass de Alta Legibilidade)
+// 2. Modificar preload.js (CSS Otimizado Zero-Lag, Sem setInterval, 120 FPS)
 // =========================================================================
 const preloadJsPath = path.join(targetDir, 'preload.js');
 if (fs.existsSync(preloadJsPath)) {
   let preloadJs = fs.readFileSync(preloadJsPath, 'utf8');
 
-  // Remove injeção anterior se existir
+  // Limpa injeções antigas
   preloadJs = preloadJs.replace(/function installOmniLiquidGlass\(\)[\s\S]*?installOmniLiquidGlass\(\);/g, '');
 
-  const liquidGlassInjection = `
+  const highPerformanceGlass = `
 function installOmniLiquidGlass() {
   const attach = () => {
-    if (!document.head) return;
-    const styleId = "omni-translucid-liquid-glass";
-    document.getElementById(styleId)?.remove();
+    if (!document.head || document.getElementById("omni-translucid-liquid-glass")) return;
 
     const style = document.createElement("style");
-    style.id = styleId;
+    style.id = "omni-translucid-liquid-glass";
     style.textContent = \`
       :root, html, body {
         background: transparent !important;
         background-color: transparent !important;
         font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif !important;
         -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
 
       #__next, main, section {
@@ -73,61 +72,60 @@ function installOmniLiquidGlass() {
         background: transparent !important;
       }
 
-      /* Elimina fundos pretos sólidos e grades opacas */
+      /* Elimina fundos pretos sólidos e grades pesadas */
       [class*="grid-pattern"], [class*="bg-grid"], svg[class*="grid"], [style*="background-color: rgb(10, 10, 10)"], [style*="background-color: #0a0a0a"] {
         background-color: transparent !important;
         background: transparent !important;
       }
 
-      /* Sidebar & Header com Vidro Translúcido */
+      /* Sidebar & Header Translúcidos - GPU Layering */
       header, nav, aside {
-        background: rgba(10, 14, 22, 0.35) !important;
-        backdrop-filter: blur(28px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-        border-color: rgba(255, 255, 255, 0.15) !important;
+        background: rgba(10, 14, 22, 0.40) !important;
+        border-color: rgba(255, 255, 255, 0.14) !important;
+        transform: translateZ(0);
       }
 
-      /* Cards com Vidro Cristalino e Densidade de Leitura */
+      /* Cards Ultra-Fluidos: Fundo óptico translúcido sem recalcular blur a cada frame */
       [class*="card"], [class*="panel"], [class*="border"], table {
-        background: rgba(14, 18, 28, 0.45) !important;
-        backdrop-filter: blur(24px) saturate(190%) contrast(105%) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(190%) contrast(105%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.22) !important;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+        background: rgba(14, 18, 28, 0.55) !important;
+        border: 1px solid rgba(255, 255, 255, 0.20) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
         border-radius: 12px !important;
+        transform: translateZ(0);
+        contain: paint;
       }
 
-      /* Tipografia em Branco Puro Reluzente com Alto Contraste */
+      /* Tipografia em Alto Contraste Nítida */
       h1, h2, h3, h4, h5, h6, [class*="title"], [class*="font-semibold"], [class*="font-bold"] {
         color: #ffffff !important;
         font-weight: 700 !important;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.90), 0 0 15px rgba(255, 255, 255, 0.20) !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85) !important;
       }
 
       p, span, label, td, th, a, div {
         color: #f1f5f9 !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.80);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
       }
 
-      /* Inputs, Dropdowns e Botões */
+      /* Inputs e Botões com Zero Lag */
       input, textarea, select {
         background-color: rgba(0, 0, 0, 0.45) !important;
         border: 1px solid rgba(255, 255, 255, 0.25) !important;
-        backdrop-filter: blur(18px) !important;
         color: #ffffff !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+        transform: translateZ(0);
       }
 
       button, [role="button"], [class*="btn"] {
         background-color: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.22) !important;
+        border: 1px solid rgba(255, 255, 255, 0.20) !important;
         color: #ffffff !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.80) !important;
+        transform: translateZ(0);
+        transition: background-color 0.15s ease, border-color 0.15s ease;
       }
 
       button:hover {
-        background-color: rgba(255, 255, 255, 0.16) !important;
-        border-color: rgba(255, 255, 255, 0.40) !important;
+        background-color: rgba(255, 255, 255, 0.18) !important;
+        border-color: rgba(255, 255, 255, 0.38) !important;
       }
     \`;
     document.head.appendChild(style);
@@ -138,15 +136,13 @@ function installOmniLiquidGlass() {
   } else {
     attach();
   }
-  window.addEventListener("load", attach);
-  setInterval(attach, 1500);
 }
 installOmniLiquidGlass();
 `;
 
-  preloadJs = liquidGlassInjection + '\n' + preloadJs;
+  preloadJs = highPerformanceGlass + '\n' + preloadJs;
   fs.writeFileSync(preloadJsPath, preloadJs, 'utf8');
-  console.log('✅ preload.js atualizado com Crystal Liquid Glass + High Contrast.');
+  console.log('✅ preload.js otimizado para 120 FPS sem intervalos redundantes.');
 }
 
-console.log('🎉 OmniRoute configurado com sucesso!');
+console.log('🎉 Otimização ProMotion 120 FPS concluída!');
