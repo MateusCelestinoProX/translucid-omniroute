@@ -1,6 +1,6 @@
 /**
- * patch-omniroute-engine.js — Translucid OmniRoute Engine (120 FPS ProMotion Edition)
- * Aceleração por Hardware Metal, Remoção de Repaints Pesados e Fluidez Absoluta
+ * patch-omniroute-engine.js — Translucid OmniRoute Engine (Zero Grid + Pure Liquid Glass Edition)
+ * Remove 100% dos quadriculados/grades de fundo e aplica Liquid Glass cristalino com alta legibilidade
  */
 const fs = require('fs');
 const path = require('path');
@@ -12,7 +12,7 @@ if (!targetDir || !fs.existsSync(targetDir)) {
   process.exit(1);
 }
 
-console.log('⚡ Otimizando OmniRoute para 120 FPS ProMotion em:', targetDir);
+console.log('⚡ Removendo quadriculado e aplicando Pure Crystal Glass no OmniRoute em:', targetDir);
 
 // =========================================================================
 // 1. Modificar main.js (Janela Nativa com Vibrancy Apple Silicon Puro)
@@ -38,11 +38,11 @@ if (fs.existsSync(mainJsPath)) {
   );
 
   fs.writeFileSync(mainJsPath, mainJs, 'utf8');
-  console.log('✅ main.js configurado com aceleração nativa.');
+  console.log('✅ main.js configurado.');
 }
 
 // =========================================================================
-// 2. Modificar preload.js (CSS Otimizado Zero-Lag, Sem setInterval, 120 FPS)
+// 2. Modificar preload.js (Eliminação Total do body::before Grid)
 // =========================================================================
 const preloadJsPath = path.join(targetDir, 'preload.js');
 if (fs.existsSync(preloadJsPath)) {
@@ -51,7 +51,7 @@ if (fs.existsSync(preloadJsPath)) {
   // Limpa injeções antigas
   preloadJs = preloadJs.replace(/function installOmniLiquidGlass\(\)[\s\S]*?installOmniLiquidGlass\(\);/g, '');
 
-  const highPerformanceGlass = `
+  const pureCrystalGlassNoGrid = `
 function installOmniLiquidGlass() {
   const attach = () => {
     if (!document.head || document.getElementById("omni-translucid-liquid-glass")) return;
@@ -67,29 +67,40 @@ function installOmniLiquidGlass() {
         text-rendering: optimizeLegibility;
       }
 
+      /* 🚫 ELIMINAÇÃO TOTAL DA GRADE / QUADRICULADO DE FUNDO */
+      body::before,
+      body::after,
+      #__next::before,
+      #__next::after,
+      main::before,
+      main::after,
+      [class*="grid"]::before,
+      [class*="grid"]::after,
+      [class*="grid-pattern"],
+      [class*="bg-grid"] {
+        display: none !important;
+        content: none !important;
+        background: none !important;
+        background-image: none !important;
+      }
+
       #__next, main, section {
         background-color: transparent !important;
         background: transparent !important;
       }
 
-      /* Elimina fundos pretos sólidos e grades pesadas */
-      [class*="grid-pattern"], [class*="bg-grid"], svg[class*="grid"], [style*="background-color: rgb(10, 10, 10)"], [style*="background-color: #0a0a0a"] {
-        background-color: transparent !important;
-        background: transparent !important;
-      }
-
-      /* Sidebar & Header Translúcidos - GPU Layering */
+      /* Sidebar & Header Translúcidos com Vidro Cristalino */
       header, nav, aside {
         background: rgba(10, 14, 22, 0.40) !important;
         border-color: rgba(255, 255, 255, 0.14) !important;
         transform: translateZ(0);
       }
 
-      /* Cards Ultra-Fluidos: Fundo óptico translúcido sem recalcular blur a cada frame */
+      /* Cards Ultra-Fluidos: Vidro Sedoso e Alta Densidade de Leitura */
       [class*="card"], [class*="panel"], [class*="border"], table {
         background: rgba(14, 18, 28, 0.55) !important;
         border: 1px solid rgba(255, 255, 255, 0.20) !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
         border-radius: 12px !important;
         transform: translateZ(0);
         contain: paint;
@@ -140,9 +151,9 @@ function installOmniLiquidGlass() {
 installOmniLiquidGlass();
 `;
 
-  preloadJs = highPerformanceGlass + '\n' + preloadJs;
+  preloadJs = pureCrystalGlassNoGrid + '\n' + preloadJs;
   fs.writeFileSync(preloadJsPath, preloadJs, 'utf8');
-  console.log('✅ preload.js otimizado para 120 FPS sem intervalos redundantes.');
+  console.log('✅ preload.js atualizado: Quadriculado 100% removido.');
 }
 
-console.log('🎉 Otimização ProMotion 120 FPS concluída!');
+console.log('🎉 OmniRoute configurado sem quadriculado!');
